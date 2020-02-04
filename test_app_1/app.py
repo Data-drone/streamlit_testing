@@ -9,9 +9,14 @@ import plotly.express as px
 import seaborn as sns
 import matplotlib.pyplot as plt
 import plotly.graph_objects as go
+from sklearn import datasets
 
 st.title('Iris')
-df = pd.read_csv("iris.csv")
+data = datasets.load_iris()
+df = pd.DataFrame(data['data'],
+        columns=['petal.length','petal.width','sepal.length','sepal.width'])
+df['variety'] = data['target']
+#df = pd.read_csv("iris.csv")
 
 if st.checkbox('Show dataframe'):
     st.write(df)
@@ -28,8 +33,12 @@ st.write(new_df)
 # create figure using plotly express
 fig = px.scatter(new_df, x =col1,y=col2, color='variety')
 
-# Plot!st.plotly_chart(fig)st.subheader('Histogram')feature = st.selectbox('Which feature?', df.columns[0:4])
+# Plot!
+st.plotly_chart(fig)
+st.subheader('Histogram')
+feature = st.selectbox('Which feature?', df.columns[0:4])
 # Filter dataframe
+
 new_df2 = df[(df['variety'].isin(species))][feature]
 fig2 = px.histogram(new_df, x=feature, color="variety", marginal="rug")
 st.plotly_chart(fig2)
